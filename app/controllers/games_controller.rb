@@ -12,6 +12,7 @@ class GamesController < ApplicationController
 
   def score
     @ans = params[:answer]
+    @letters = params[:letters]
     @result = if included?(@ans, @letters)
                 if en_word?(@ans)
                   "Congratulations! #{@ans} is a valid English word!"
@@ -23,9 +24,11 @@ class GamesController < ApplicationController
               end
   end
 
+  private
+
   def en_word?(word)
     response = URI.open("https://wagon-dictionary.herokuapp.com/#{word}")
-    json = JSON.parse(response)
+    json = JSON.parse(response.string)
     json['found']
   end
 
